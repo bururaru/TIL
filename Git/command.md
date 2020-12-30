@@ -44,3 +44,62 @@
 - `git push origin master`
 - 뜻 : 깃에 올려줘 origin 으로 master를
 - 원격 저장소에 로컬 저장소의 데이터를 전송
+
+
+
+## 상태확인
+
+### 1. status
+
+- ``` git status```
+
+- 전체 git 상태를 출력
+
+### 2. log
+
+- ``` git log ```
+- 커밋 기록을 전체 다 출력
+- 옵션
+  - ```--oneline``` :  author, date같은 정보를 제외하고 한줄로 출력
+  - ``` --graph``` : 커밋을 점으로 표현하고 커밋을 연결해서 그래프 형태로 출력
+
+### 3. diff
+
+- ``` git diff```
+- 현재 변경사항을 체크 ( add 이전에 )
+
+
+
+## 추가파일
+
+### 1. gitignore
+
+- ```.gitignore``` 파일을 생성 후 git으로 관리하고 싶지 않은 파일들을 지정
+
+- [gitignore.io](https://www.toptal.com/developers/gitignore) 
+
+  
+
+## 브랜치
+
+### 1. 생성
+
+- ``` git branch <브랜치이름>```
+
+### 2. 이동
+
+- ```git switch <브랜치이름>``` => 최신문법
+- ``` git checkout <브랜치이름>``` => 예전 문법
+
+### 3. 삭제
+
+- ```git branch -d <브랜치이름>```
+
+### 4. 병합
+
+- ```git merge <브랜치이름> ``` 
+- base가 되는 branch로 이동해서 명령어 사용
+- 충돌이 발생한 경우 -> 충돌을 해결하고 다시  add, commit, push
+
+### 
+
