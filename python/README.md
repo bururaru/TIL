@@ -1,6 +1,8 @@
 # python
 
-interpreter 기반의 언어! (compile 기반이 아니다...)
+#### Multicampus python 강의 (210104~)의 내용 정리
+
+> interpreter 기반의 언어! (compile 기반이 아니다...)
 
 
 
