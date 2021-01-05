@@ -92,6 +92,10 @@ b = 1,2,3,4,5
 ```python
 c = {"1" : "first", "2" : "second"}
 c = dict()
+c = dict([("a", "b"), ("c", "d")]) #tuple 활용하는 방법
+c = dict(
+	a = "first",
+	b = "second")
 ```
 
 ### 키 추가
@@ -99,6 +103,39 @@ c = dict()
 ```python
 c["3"] = "Third"
 ```
+
+
+
+### 키-값 제거
+
+```python
+del c['3']
+c.pop('3')
+```
+
+
+
+### 데이터 확인
+
+```python
+c.get("1") #key 만 넣어서 value를 확인할 수 있다
+c["1"]
+```
+
+### 관련 함수
+
+```python
+c.keys() #key만 모아서 dict_keys 타입으로 뱉어냄
+c.values() #value만 모아서 dict_values 타입으로 뱉어냄
+c.items() #item 쌍을 모아서 dict_items 타입으로 뱉어냄
+c.clear() #모든 내용 제거
+```
+
+- `list` 나 `tuple`과 같이 보이는 타입이지만 아니라서 list 나 `tuple`에 사용할 수 있는 함수 사용 불가능
+
+- **for문과 같이 반복의 매체로는 사용 가능**
+
+   	
 
 
 
