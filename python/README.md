@@ -28,7 +28,7 @@ m의 n제곱 연산
 
 
 
-## list
+## list []
 
 ### 생성 방법
 
@@ -53,16 +53,24 @@ a[0:3]
 
 
 
-## tuple
+## tuple ()
 
 ### 생성방법
 
 ```python
-b = {}
+b = ()
 b = tuple()
 ```
 
 
+
+## dictionary {}
+
+### 생성방법
+
+```
+c = {"1" : "first", "2" : "second"}
+```
 
 
 
@@ -90,6 +98,5 @@ b = "text"
 print('{} {}' .format(a, b))
 print('%d %s' %(a, b))
 ```
-
 
 
