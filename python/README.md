@@ -8,23 +8,23 @@
 
 ## 연산자
 
-### %
+`%` 나머지연산
 
-나머지 연산
+`//` 몫 연산
+
+`**` 제곱연산 (m**n : m의 n제곱)
+
+## 비트연산자
+
+`&` 논리곱
+
+`|` 논리합
 
 
 
-### //
-
-몫 연산
 
 
 
-### **
-
-``` m**n```
-
-m의 n제곱 연산
 
 
 
@@ -137,7 +137,31 @@ c.clear() #모든 내용 제거
 
    	
 
+## set{}
 
+> 순서 X, 중복 X
+
+### 관련 함수
+
+```python
+& == intersection() # 교집합
+| == union() #합집합
+- == difference() #차집합
+add()
+remove()
+discare()
+```
+
+
+
+
+
+## range()
+
+```python
+range(1, 10) #1~9까지 범위
+range(2, 50, 2) #2~49까지 2씩 커지는 값들만
+```
 
 
 
@@ -151,12 +175,52 @@ c.clear() #모든 내용 제거
 
 
 
-## range()
+## date type
+
+> import해서 사용해야 함
+
+`from datetime import date` 이나 `from datetime import datetime` 으로 import
+
+한번에 그냥 `import datetime` 으로 import 하는것도 괜찮을지도?
+
+
+
+- date : 시간정보 없음
+- datetime : 시간정보 있음
+
+`timedelta()` 사용해서 날짜 연산 가능 (days, hours 등 가능, years months 불가능)
+
+
+
+추가 기능이 필요하다면 
+
+[python-dateutil]: https://pypi.org/project/python-dateutil/	"dateutil"
+
+ 패키지 설치해서 사용.
 
 ```python
-range(1, 10) #1~9까지 범위
-range(2, 50, 2) #2~49까지 2씩 커지는 값들만
+ from dateutil.relativedelta import * #year 나 month 연산 가능
+ from dateutil.parser import *  #특정 형태로 반환
 ```
+
+### 문자열 -> 날짜 type 변환
+
+(변수 = '2021,01,06-11:12:40' )일때 `strptime(변수, '%Y, %m, %d - %H:%M:%S')`로 type 변환 가능 .(형태과 완전히 동일해야 함)
+
+
+
+## for구문
+
+> list 선언시 for, if를 활용할 수 있다. dict 선언시에도 사용 가능
+
+```python
+a = [1. 2. 3. 4. 5]
+#사용 예시
+tmp_list = [tmp ** 2 for tmp in a]
+tmp_list2 = [tmp * 2 for tmp in a if tmp%2 == 0]
+```
+
+
 
 
 
