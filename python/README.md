@@ -230,15 +230,31 @@ tmp_list2 = [tmp * 2 for tmp in a if tmp%2 == 0]
 
 ## 기타
 
-### escape 코드
+### print 옵션
+
+### sep 
+
+문자열 사이에 구분자 추가
 
 ``` python
-print("abc', "def", sep="\n")
+print("abc", "def", sep="\n")
 ```
 
 - \n : 개행
 - \t : 탭 
 - \000 : 널 문자
+
+### end
+
+print 다 끝나고 난 뒤에 구분자 추가
+
+```python
+print("abc", "def", end='\n')
+```
+
+
+
+
 
 
 
