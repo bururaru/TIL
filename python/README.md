@@ -52,6 +52,7 @@ a[3]
 ```python
 a = [1, 2, 3, 4, 5]
 a[0:3]
+a[0::-1] #거꾸로 슬라이싱
 ```
 
 ### list 수정
@@ -125,10 +126,12 @@ c["1"]
 ### 관련 함수
 
 ```python
-c.keys() #key만 모아서 dict_keys 타입으로 뱉어냄
-c.values() #value만 모아서 dict_values 타입으로 뱉어냄
-c.items() #item 쌍을 모아서 dict_items 타입으로 뱉어냄
+c.keys() #key만 모아서 dict_keys 타입으로 반환
+c.values() #value만 모아서 dict_values 타입으로 반환
+c.items() #item 쌍을 모아서 dict_items 타입으로 반환
 c.clear() #모든 내용 제거
+c.get(key, value) #dic에 'key'가 없으면 dafault값인 'value'를 반환
+c.get(key) #dic 안에서 key값에 해당하는 value를 반환
 ```
 
 - `list` 나 `tuple`과 같이 보이는 타입이지만 아니라서 list 나 `tuple`에 사용할 수 있는 함수 사용 불가능
@@ -144,7 +147,7 @@ c.clear() #모든 내용 제거
 ### 관련 함수
 
 ```python
-& == intersection() # 교집합
+`& == intersection() # 교집합
 | == union() #합집합
 - == difference() #차집합
 add()
@@ -209,18 +212,50 @@ range(2, 50, 2) #2~49까지 2씩 커지는 값들만
 
 
 
-## for구문
+## for loop
 
-> list 선언시 for, if를 활용할 수 있다. dict 선언시에도 사용 가능
+> list 선언시 for, if를 활용할 수 있다. dict 선언시에도 사용 가능 (comprehension)
 
 ```python
-a = [1. 2. 3. 4. 5]
+a= [1, 2, 3, 4, 5]
 #사용 예시
 tmp_list = [tmp ** 2 for tmp in a]
 tmp_list2 = [tmp * 2 for tmp in a if tmp%2 == 0]
 ```
 
 
+
+### enumerate
+
+` for p in enumerate(a)` 와 같은 방법으로 사용 : 몇번째 반복인지 tuple 형태로 반환
+
+```python
+a= [1, 2, 3, 4, 5]
+for index, value in enumerate(a): #인덱스, 원소 순서로 반환
+    print(index, value)
+0 1
+1 2
+2 3
+3 4
+4 5   
+```
+
+### for - else 
+
+반복 가능한 부분이 모두 반복된 후  else 부분이 실행됨
+
+```python
+for x in range(5):
+    print(x)
+else:
+    print('end')
+```
+
+
+
+## while loop
+
+while - else 도 사용 가능
 
 
 
@@ -314,3 +349,43 @@ print('%d %s' %(a, b))
 
 
 
+### random
+
+`import ramdon`
+
+```python
+.random() # 0~1 사이 랜덤 실수
+.randint(n, m) # n~m 사이 랜덤 정수
+.choices(list, k = n) #list 값들 중 n개 랜덤 선택
+```
+
+
+
+## function
+
+`from #### import @@@ as x`  == `from ####.@@@ import %%`
+
+`import *`는 해당 모듈의 모든 함수를 다 사용하겠다 라는 뜻
+
+
+
+### 형태
+
+```python
+def function1(): #매개변수 X, return X
+	print('out')
+def function2(): #매개변수 X, return O
+    return 'out'
+def funciton3(x): #매개변수 O, return O
+    return x + "out"
+def function4(*x): #매개변수 개수 제한 없이 tuple로 입력 받는다
+    return 
+def function5(**x): #매개변수 개수 제한 없이 dict로 입력 받는다
+    return
+```
+
+
+
+### return 특징
+
+return 값이 2개 이상인 경우에는 tuple 형태로 return 된다
