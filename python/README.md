@@ -347,8 +347,6 @@ print('%d %s' %(a, b))
 
 
 
-
-
 ### random
 
 `import ramdon`
@@ -358,6 +356,8 @@ print('%d %s' %(a, b))
 .randint(n, m) # n~m 사이 랜덤 정수
 .choices(list, k = n) #list 값들 중 n개 랜덤 선택
 ```
+
+
 
 
 
@@ -418,7 +418,7 @@ def multiply(x, y):
 	return x*y
 multiply(10, 20)
 
-#아래와 같이 사용도 가능 : 함수의 매개변수로 사용
+#아래와 같이 사용도 가능 : 함수의 인자로 사용(function, lambda 모두 사용 가능)
 def lambdaDemo(x, y, func):
     print(x*y*func(100,100))
 lambdaDemo(10, 20, lambda x,y : x*y)
@@ -433,8 +433,6 @@ def funcDemo(word : str, num : int):
 ```
 
 함수의 매개변수 type을 미리 지정할 수 있음
-
-
 
 
 
@@ -458,3 +456,61 @@ def function5(**x): #매개변수 개수 제한 없이 dict로 입력 받는다
 ### return 특징
 
 return 값이 2개 이상인 경우에는 tuple 형태로 return 된다
+
+
+
+## Class
+
+> 'class는 설계도면, instance는 설계도를 가지고 만들어진 건물' 과 비슷한 느낌
+
+### 형태
+
+```python
+class Demo:
+    x = 0  #클래스 소유의 변수 : instance가 공통으로 사용함
+    
+    def __init__(self): # 객체 생성시 호출되는 함수 : 초기화	
+    	pass
+    def function(self): # 사용자 정의 함수이고 인스턴스의 소유가 됨
+        pass
+```
+
+`self` : instance의 소유라는 것을 명시
+
+
+
+### naming rule 
+
+- user define function
+  - setXXXX
+  - getXXXX
+  - isXXXX
+
+### class method
+
+```python
+class Demo:
+    raiseRate = 1.1
+    @classmethod #꼭 적어줘야 함.
+    def updateRate(cls, num):
+        cls.raiseRate = num
+```
+
+- method 안에서 method의 `class property`, `class method`에 접근할 때 사용 
+
+### static method
+
+```python
+class Demo:
+    raiseRate = 1.1
+    @staticmethod #꼭 적어줘야 함.
+    def updateRate(num):
+        Demo.raiseRate = num
+```
+
+- method의 실행이 instance나 외부 상태에 영향을 끼치지 않을 때 사용 (class 밖에서 실행할 때)
+
+
+
+
+
