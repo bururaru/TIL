@@ -369,6 +369,75 @@ print('%d %s' %(a, b))
 
 
 
+### default parameter
+
+```python
+def demoFunction(x, y, z = True):
+```
+
+`=True` 라고 지정하는 부분이 `default parameter` => 함수 호출시 비어있는 인자의 자리에는 True가 들어간다.
+
+
+
+### 특징 (자료형 특징)
+
+function에 전달되는 매개변수가 `mutable, immutable` 인지가 중요!
+
+- mutable : list, dict => function으로 전달될 때 동일한 객체의 주소만 전달한다. (function 내부에서 수정된 값이 global 반영된다)
+- immutable : int, string, tuple => function으로 전달될 때 다른 객체가 생성된다.
+
+### nested function (중첩 함수)
+
+- function 내부에 들어가는 functino으로, 부모함수 바깥에서 호출할 수 없다
+
+  ```python
+  def outer(num1):
+      def inner(num2):
+          print(num2)
+      inner(num1+100)
+  outer(200)
+  ```
+
+- 가독성 좋다!
+
+### recursive function (재귀함수)
+
+- 함수 내부에서 함수를 다시 호출하는 방식
+
+
+
+### lamda  function
+
+- 가독성 향상, 메모리 절약 
+
+``` python
+(lambda x, y : x*y )(10,20)
+
+#위와 동일한 funtion
+def multiply(x, y):
+	return x*y
+multiply(10, 20)
+
+#아래와 같이 사용도 가능 : 함수의 매개변수로 사용
+def lambdaDemo(x, y, func):
+    print(x*y*func(100,100))
+lambdaDemo(10, 20, lambda x,y : x*y)
+```
+
+
+
+### hint
+
+```python
+def funcDemo(word : str, num : int):
+```
+
+함수의 매개변수 type을 미리 지정할 수 있음
+
+
+
+
+
 ### 형태
 
 ```python
