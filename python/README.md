@@ -512,5 +512,66 @@ class Demo:
 
 
 
+## Object Oriented Programming
 
+```python
+def __init__(self)
+```
+
+- 초기화 함수 선언은  class당 한번만 가능하다.
+
+
+
+### super()
+
+`부모 class`의 메소드를 상속할 때 사용
+
+```python
+class Person(object):
+    def __str__(self, name, age, address):
+        self.name = name
+        self.age = age
+        self.address = address
+class StudentVO(Person):
+    def __str__(self, name, age, address, stu_id):
+        super().__init__(name, age, address)
+```
+
+#### 장점
+
+- 상속받는 class 이름이 달라져도 사용 가능!
+- 이름을 적지 않고 참고하기 때문에 유지보수가 쉽다!
+
+
+
+### 은닉화  (encapsulation ? Information hiding?)
+
+```python
+# 변수와 함수에 메소드에 모두 사용 가능
+class MyDate(object):
+    def setYear(self, year):
+        if year < 0:
+            self.__year = 2021 # __year 변수는 private 상태로 선언됨
+        else:
+            self.__year = year
+    def getYear(self):
+        return self.__year
+	def __getInfo(self): #__getInfo 메소드는 외부에서 호출 불가
+        return
+```
+
+- 변수, 메소드 이름 앞에 `__`를 붙여주면 인스턴스에서 직접 접근 `불가능`
+
+- `setYear`와 같은 방법으로 간접 접근만 가능함
+
+  
+
+### 다형성 
+
+- 상위 class 에 정의된 메소드를 하위 class에서 재정의 (method overriding)
+- 부모 class 에 있는 메소드와 동일한 이름으로 하위 class에서 재정의
+
+
+
+isinstance
 
