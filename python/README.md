@@ -469,13 +469,15 @@ return 값이 2개 이상인 경우에는 tuple 형태로 return 된다
 class Demo:
     x = 0  #클래스 소유의 변수 : instance가 공통으로 사용함
     
-    def __init__(self): # 객체 생성시 호출되는 함수 : 초기화	
+    def __init__(self): # 객체 생성시 호출되는 메소드 : 초기화	
     	pass
-    def function(self): # 사용자 정의 함수이고 인스턴스의 소유가 됨
+    def function(self): # 사용자 정의 메소드이고 인스턴스의 소유가 됨
         pass
 ```
 
 `self` : instance의 소유라는 것을 명시
+
+- `__init__`을 정의하지 않아도, 자동으로 인자가 없는 메소드로 생성된다.
 
 
 
@@ -573,5 +575,154 @@ class MyDate(object):
 
 
 
-isinstance
+### 다중상속
+
+- method overriding 된 메소드는 먼저 상속받은 클래스의 메소드가 실행됨.
+
+  
+
+### 추상화
+
+- 추상 class 는 객체 행성 불가능
+- 추상 method를 가지는 class는 : 추상 class
+- 함수 구현을 강제하기 위해 사용됨 (부모 class 를 추상화 시켜서 자녀 class 강제 사용)
+
+```python
+from abc import *
+
+class Base(metaclass=ABCMeta):
+    @abstractmethod
+    def study(self):
+        pass
+```
+
+
+
+### 데코레이터
+
+- 함수를 수정하지 않고 다른 기능을 구현할 때 사용
+- 함수에 다른 함수를 인자로 전달하여 사용
+
+```python
+def decorator(func): # 데코레이터 함수 선언
+    def wrapper():
+        print(func.__name__, '시작') # 이 부분이 공통으로 들어가게, 하지만 여러번 작성하고 싶지 않다.
+        func() 					  # 이 부분에 함수를 전달해서 decorator 를 사용하자!
+        print(func.__name__, '끝') # 이 부분이 공통으로 들어가게, 하지만 여러번 작성하고 싶지 않다.
+    return wrapper
+
+def king():
+    print('i am king')
+def queen():
+    print('i am queen')
+    
+# 사용방법 1
+king_1 = decorator(king)
+king_1()
+queen_1 = decorator(queen)
+queen_1()
+
+# 사용방법 2
+@decorator
+def prince():
+    print('i am prince')
+prince()
+```
+
+```
+king 시작
+i am king
+king 끝
+queen 시작
+i am queen
+queen 끝
+prince 시작
+i am prince
+prince 끝
+```
+
+- parameter 개수과 관계없이 적용 가능하게 만들기 -> 가변인자 `*args`사용하면 가능
+
+
+
+- class 의 method에도 적용 가능. 외부에 만들어둔 함수를 class 내부에서 사용
+
+```python
+def tagH1(func):
+    def wrapper(self, *args): #인스턴스가 호출할 수 있다는 의미로 self 넣어줘야 함
+        return '<h1>{}</h1>' .format(func(self, *args))
+    return wrapper
+
+class Per(object):
+    def __init__(self, name):
+        self.name = name
+    @tagH1
+    def getName(self):
+        return self.name
+```
+
+
+
+### iterator 이터레이터
+
+iterable 보다 iterator 사용하는게 동작 속도가 더 빠르다
+
+```python
+userlist = [1, 2, 3, 4, 5]
+a = iter(userlist)
+print(next(a))
+```
+
+순차적으로 다음 데이터를 리턴할 수 있는 객체
+
+- 내장함수 `next()` 사용해서 순환하는 다음 값을 반환함
+
+#### iterable 객체와는 다르다!
+
+list, tuple, dict, sting 은 iterator 객체가 아님!
+
+- 관련 예시
+
+  ```python
+  class Counter:
+      def __init__(self, stop):
+          self.stop = stop
+      def __iter__(self): #iterable로 만들어주기 위해서 필요한 내장함수
+          return CounterIterator(self.stop)
+  
+  class CounterIterator:
+      def __init__(self, stop):
+          self.current = 0
+          self.stop = stop
+      def __next__(self):
+          if self.current < self.stop :
+              rtnValue = self.current
+              self.current +=1
+              return rtnValue
+          else:
+              pass
+  
+  cnt_iterator = iter(Counter(10))
+  print(next(cnt_iterator))
+  ```
+
+  
+
+
+
+### generator 제너레이터
+
+```python
+def textSequenceFunc():
+    msg = 'hi python'
+    for txt in msg:
+        yield txt #yield를 통해 현재 값을 호출된 곳에 전달하면서 현재 실행 상태를 저장후 재실행하면 저장된 곳부터 실행
+
+char_iter = iter(textSequenceFunc())
+next(char_iter)
+```
+
+
+
+
 
