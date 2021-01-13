@@ -77,7 +77,82 @@ p#page { color: red !important; } /*구체성 무시하고 우선순위 가짐*/
 
 - 700 : bold
 
+
+### vertical-align
+
+- inline 요소에만 적용 가능
+- 세로 위치 정렬
+
+### text-align
+
+- inline 요소에만 적용 가능
+- 좌우 정렬
+- box 요소에 선언하면, box요소 내부의 텍스트가 정렬됨 (box 요소 자체의 가운데 정렬을 위해서는 `margin: auto` 사용)
+
+### white-space
+
+- 줄바꿈과 공백에 관한 속성
+- `normal` 과 `nowrap`을 주로 사용
+
+### letter-spacing
+
+- 글자 사이 간격
+
+### word-spacing
+
+- 단어 사이 간격
+
+### word-break
+
+- 단어 어떻게 자를지 정하는 속성
+
+### workd-wrap
+
+- 요소를 벗어나는 단어를 어떻게 감쌀지 정하는 속성
+
+
+
+## layout
+
+### display
+
+- `inline`
+
+  - margin, padding, border 를 지정해도 부모 block 요소의 상,하에 영향을 주지 못함 (좌, 우 값만 사용함)
+
+- `block`
+
+- `inline-block`
+
+  - inline과 같은 배치 형태를 가지지만,  blcok과 같은 성격을 가짐
+
+    ```html
+    <div stype="display:inline">text</div>
+    <!-- 두 요소 사이에는 약 4px의 좌우 여백 존재 -->
+    <div stype="display:inline">text</div>
+    ```
+
+### visibility
+
+- `hidden` : 요소를 숨기지만 요소가 존재하는 영역은 그대로 유지됨. (display:none 은 아예 렌더링을 안하는 것)
+
+### float
+
+- 요소를 보통의 흐름에서 벗어나 +z 축 방향으로 붕 뜨는 느낌으로 만듬
+- 주변 텍스트나 inline 요소가 주변을 감싸게 되는 특징 있음
+- 대부분 display 요소 값을 block으로 변경시킴
+
+### claer
+
+- float 된 요소의 영향에서 벗어나게 만드는 속성
+
+- block-level 요소에만 적용 가능
+
   
+
+
+
+
 
 
 
