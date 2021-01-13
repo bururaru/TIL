@@ -665,7 +665,7 @@ class Per(object):
 
 ### iterator 이터레이터
 
-iterable 보다 iterator 사용하는게 동작 속도가 더 빠르다
+iterable 보다 iterator 사용하는게 동작 속도가 더 빠르다 (적은 자원으로 큰 데이터 처리)
 
 ```python
 userlist = [1, 2, 3, 4, 5]
@@ -724,5 +724,186 @@ next(char_iter)
 
 
 
+### composition == aggregation
 
+상속을 받지 않고 class의 일부 기능만 가져다 쓰는 기능
+
+```python
+class Calc02(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def mutiply(self):
+        return self.x * self.y
+    
+class userCalc:
+    def __init__(self,x ,y):
+        self.x = x
+        self.y = y
+        self.cal02 = Calc02(x,y) #객체를 명시적으로 생성
+
+    def multiply(self):
+        return self.cal02.mutiply() #생성한 객체로 필요한 method 호출해서 사용.
+```
+
+
+
+### exception
+
+> 프로그램이 동작하다가 에러로 중단되지 않게 해주는 기능
+
+`try` :  에러가 발생 할 가능성이 있는 코드 (정상 코드)
+
+`except` : 발생된 에러를 잡기위한 객체 정의 (예외가 발생 할때만 수행)
+
+- 프로그램의 흐름을 정상적으로 컨트롤
+- 예외 발생의 디버깅
+- 로그파일 만들어서 예외정보를 저장
+
+`else` : 에러가 발생되지 않을 때 실행되는 블럭
+
+`finally` : 무조건 수행
+
+```python
+def userKeyIn():
+    try :
+        age = int(input('본인의 나이를 입력하세요'))
+        print(age)
+    except ValueError as e:
+        print(e.args[0])
+    except IndexError as e:
+        userKeyIn()
+    else:
+        print("정상 동작시에만 실행되는 부분", age)
+    finally:
+        print("항상 실행되는 부분")
+```
+
+`    except Exception as e `:이거 하나로 다중 except를 대체 가능 
+
+
+
+예외 강제 발생
+
+```python
+class Account:
+    def __init__(self, account, balance, interest_rate):
+        self.account = account
+        self.balance = balance
+        self.interest_rate = interest_rate
+
+    def withDraw(self, amount):
+        try:
+            if self.balance < amount:
+                raise Exception ('에러 발생')  # 에러 강제 발생
+        except Exception as e:
+            print('잔액이 부족합니다')
+        else:
+            self.balance -= amount
+
+account = Account('100', 10000, 0.073)
+account.withDraw(200000)
+print('프로그램 종료')
+```
+
+```python
+class InsufficientError(Exception): #에러를 클래스로 정의해서 사용하는 것도 가능
+    def __init__(self, msg):
+        self.msg = msg
+        
+raise InsufficientError('사용자 정의 에러 발생!') #에러 강제 발생
+```
+
+
+
+
+
+### 클래스 없이 객체 생성
+
+> 변수만 있는 class 가 필요할때 사용
+
+`collections.namedtuple('클래스 이름',  (변수) or [변수])`
+
+```python
+import collections
+
+Persona = collections.namedtuple('Person', ['name', 'id']) # list 형식
+Persona = collections.namedtuple('Person', 'name id') # tuple 형식
+Persona = collections.namedtuple('Person', 'name, id') # string 형식
+per = Persona('lee', 100)
+print(per, type(per))
+```
+
+결과 : `Person(name='lee', id=100) <class '__main__.Person'>`
+
+
+
+속성 접근 방법 1
+
+```python
+per[0] # name
+per[1] # id
+```
+
+속성 접근 방법 2
+
+```python
+per.name
+per.id
+```
+
+속성 접근 방법 3
+
+```python
+name, id = per
+print(name, id)
+```
+
+
+
+
+
+## 파일 입출력
+
+`open()`
+
+`with open()` : file.close()를 해줄 필요가 없다. 자동으로 종료 됨
+
+```python
+file = open('ai/project/test.txt', 'r')
+with open('ai/project/test.txt', 'r') as file
+```
+
+### mode
+
+- `w` : 쓰기 
+
+- `r` : 읽기
+
+- `a` : append (뒤에다 내용 추가)
+
+  
+
+### 관련 함수
+
+- `.read()` : 내용 읽어서 반환
+- `.write('내용')` : 내용을 파일에 씀
+- `.readline()` : 한줄씩 읽어서 반환, 자동으로 뒤에 `'\n'`이 추가됨
+- `.readlines()` : 한줄씩 전체를 다 읽어서 한줄씩 리스트 요소에 넣어 리스트로 반환 
+
+```python
+a = file.read()
+file.write('{}' .format(data))
+```
+
+### 기타
+
+text로 이루어진 파일은 loop를 돌릴 수 있음
+
+```python
+file = open('ai/project/test.txt', 'r')
+for line in file:
+	print(line)
+```
 
