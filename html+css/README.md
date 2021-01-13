@@ -59,3 +59,25 @@ p#page { color: red !important; } /*구체성 무시하고 우선순위 가짐*/
 - serif : 삐침이 있는 글자 (바탕에 해당)
 
 `generic-family`는 상속되지 않으므로, 하위에서 폰트 변경 시 다시 선언 해줘야 함.
+
+
+
+### line-height
+
+- 2, 200% 등의 표기는 font-size의 배수로 표현됨
+- font-size 위아래로 더 공간이 들어가는 수치
+
+### font-size
+
+- 기본값은 16px (1em)
+
+### font-weight
+
+- 400 : normal
+
+- 700 : bold
+
+  
+
+
+
