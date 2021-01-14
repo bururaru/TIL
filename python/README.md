@@ -130,7 +130,7 @@ c.keys() #key만 모아서 dict_keys 타입으로 반환
 c.values() #value만 모아서 dict_values 타입으로 반환
 c.items() #item 쌍을 모아서 dict_items 타입으로 반환
 c.clear() #모든 내용 제거
-c.get(key, value) #dic에 'key'가 없으면 dafault값인 'value'를 반환
+c.get(key, value) #dic에 'key'가 없으면 dafault값인 'value'를 반환 / key가 있으면 그 뒤에 들어가는 작업(value에 1 더하기)을 수행 c.get(key, value) + 1
 c.get(key) #dic 안에서 key값에 해당하는 value를 반환
 ```
 
@@ -907,3 +907,108 @@ for line in file:
 	print(line)
 ```
 
+
+
+
+
+### bianry 형태의 입출력
+
+#### 객체 직렬화 (serializable)
+
+```python
+import pickle
+
+scores = {'kor' : 90, 'eng' : 95, 'math' : 70, 'sci' : 82}
+with open(file='dict_pickle.txt', mode='wb') as file:
+    pickle.dump(scores , file)  #file에 scores 객체를 직접 저장
+```
+
+- 객체를 직접 저장하는 방식       
+
+
+
+###  pandas
+
+#### csv
+
+![image-20210114132136842](README.assets/image-20210114132136842.png)
+
+이런 데이터를 csv로 읽어오면, 아래와 같이 접근 가능 (series 타입 반환)
+
+```python
+bmi = pd.read_csv('./word/service_bmi.csv', header=None, encoding='utf-8')
+bmi.info()
+bmi.head() # 앞쪽 만 보여줌
+bmi.tail() # 뒤쪽 만 보여줌
+bmi.height # height 열만 보여줌
+bmi['weight'] # weight 열만 보여줌
+```
+
+
+
+#### excel
+
+- excel 파일 접근을 위해서는 `xlrd`, `openpyxl` 패키지 설치 필요
+
+```python
+kospiDataest = pd.ExcelFile('./word/sam_kospi.xlsx')   # 엑셀 파일 불러오기
+kospi = kospiDataest.parse('sam_kospi') # 특정 시트에 접근
+```
+
+
+
+#### json
+
+- 네트워크 상에서 표준으로 사용되는 파일 형식 : key:value 로 되어있음
+- encoding : dict, list       -> json 문자열로 변환 : dumps() / 반환되는 type은 string
+- decoding : json 문자열 -> dict, list
+- `import json` 필요
+
+```python
+#encoding
+user = {'id' : 1234, 'name' : '섭섭해'}
+jsonStr = json.dumps(user)
+
+#decoding
+user2 = json.loads(jsonStr)
+```
+
+
+
+
+
+
+
+## 정규표현식
+
+`import re` 임포트해서 사용. (regular expression)
+
+### 메타문자
+
+`.` : 무엇이든 한 글자 의미
+
+`^` : 시작문자 지정
+
+`*` : 0 or more
+
+`+` : 1 or more
+
+`?` : 0 or 1
+
+```
+[abc]     : a, b, c 중 한개의 문자와 매치
+[^0-5]    : 0-5로 시작하는 것 제외하고 매치
+^[0-5]    : 0-5로 시작하는 것과 매치
+```
+
+### 문자 클래스
+
+`\d` : 숫자의 자릿수
+
+`\D` : 숫자가 아닌 문자 매칭의 자릿수
+
+`\w` : 문자 + 숫자
+
+`\W` : 문자+숫자 아닌 문자와 매치
+
+`\s` : 공백
