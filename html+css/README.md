@@ -148,7 +148,19 @@ p#page { color: red !important; } /*구체성 무시하고 우선순위 가짐*/
 
 - block-level 요소에만 적용 가능
 
-  
+
+### position
+
+- 기본은 `static` : offset에 영향을 받지 않는다
+- `relative` : 기존 자리를 유지하면서 offset 만큼 이동함. (**부모에 relative 선언하면, 자식 요소들의 위치 기준점이 됨**)
+- `absolute` : block 요소로 변경됨. 문서의 흐름을 벗어나게 됨. 위치 기준으로부터 offset만큼 이동함
+- `fixed` : 문서의 흐름에서 벗어남. 화면을 기준으로 offset만큼 이동함. 부모 요소의 position: relative 에 영향을 받지 않음
+
+### z-index
+
+- position 이 static 아닌 경우에만 지정 가능
+- 큰 값이 가장 위쪽으로 쌓임
+- 부모가 z-index가 있으면 부모 내부에서만 적용됨
 
 
 
