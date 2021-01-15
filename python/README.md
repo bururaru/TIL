@@ -1011,4 +1011,19 @@ user2 = json.loads(jsonStr)
 
 `\W` : 문자+숫자 아닌 문자와 매치
 
-`\s` : 공백
+`\s` : 공백																																																																																																									
+
+### 기타 함수
+
+`zip()`
+
+- 요소의 개수가 많은  list를 묶어서 tuple로 반환
+
+```python
+num = [1, 2, 3, 4]
+name = ['lee', 'kin', 'park', 'man']
+dic = {}
+for keym value in zip(num, name):
+    dic[key] = value
+```
+
