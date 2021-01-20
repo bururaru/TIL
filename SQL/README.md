@@ -32,7 +32,7 @@ D - delete
 SELECT 특정 column 이름 | *(전체 column) | 표현식 | DISTINCT | AS column 별칭
 FROM 테이블 이름 ;
 WHERE 조건식
-GROUP BY 기준 COLUMN
+GROUP BY 기준 COLUMN 
 HAVING 조건식 (GROUP BY의 조건식)
 ORDER BY 기준 COLUMN
 ```
@@ -85,11 +85,14 @@ ORDER BY [기준 COLUMN] [ASC | DESC]
 ### GROUP BY
 
 ```sql
-GROUP BY [기준 COLUMN]
+GROUP BY [기준 COLUMN] | expr
 ```
 
 - COLUMN 의 값을 기준으로 묶어줌
 - GROUP BY에 기준이 된 열은 SELECT에 단일함수로 사용 가능
+- 별칭이나 열 번호를 대신 사용 불가능
+
+
 
 ### HAVING
 
@@ -255,4 +258,57 @@ SELECT ID || '의 월급은' || NAME || SALARY || '입니다'
 - `MIN`
 - ``MAX`
 - `COUNT`
+
+
+
+### 기타 SELECT 함수
+
+#### JOIN (오라클 전용)
+
+```sql
+SELECT EMP_NAME, DEPT_NAME
+FROM EMPLOYEE E, DEPARTMENT D
+WHERE E.DEPT_ID = D.DEPT_ID;
+WHERE E.DEPT_ID(+) = D.DEPT_ID; -- RIGHT JOIN과 같은 기능
+```
+
+- 위와 같은 비교에서는 값이 NULL 인건 누락됨
+- FULL JOIN이 존재하지 않는다.
+
+
+
+#### JOIN (ANSI 표준)
+
+```sql
+SELECT  EMP_NAME,
+        DEPT_NAME
+FROM    EMPLOYEE
+JOIN    DEPARTMENT USING(DEPT_ID);
+-----------------------------------------------------------------
+SELECT  EMP_NAME,
+        DEPT_NAME
+FROM    EMPLOYEE E
+JOIN DEPARTMENT D ON(E.DEPT_ID = D.DEPT_ID) ;
+```
+
+- USING 은 비교하는 이름이 동일할 때
+- ON은 세부적으로 설정 가능
+- N개의 TABLE을 JOIN 하면 N-1개의 JOIN이 사용되어야 함
+- <u>NATURAL JOIN, CROSS JOIN 은 사용하지 말것</u>
+
+##### OUTER JOIN
+
+```sql
+FROM    EMPLOYEE
+LEFT JOIN    DEPARTMENT USING(DEPT_ID);
+---------------------------- JOIN 기준으로 왼쪽에 있는 TABLE의 조건 만족하지 않는 값도 모두 표시
+FROM    EMPLOYEE
+RIGHT JOIN    DEPARTMENT USING(DEPT_ID);
+---------------------------- JOIN 기준으로 오른쪽에 있는 TABLE의 조건 만족하지 않는 값도 모두 표시
+FROM    EMPLOYEE
+FULL JOIN    DEPARTMENT USING(DEPT_ID);
+---------------------------- JOIN 기준으로 양쪽에 있는 TABLE의 조건 만족하지 않는 값도 모두 표시
+```
+
+
 
