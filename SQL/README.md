@@ -254,9 +254,9 @@ SELECT ID || '의 월급은' || NAME || SALARY || '입니다'
 - 그룹 함수가 SELECT 에 사용되면 다른 column 정의가 불가능함. (결과 행의 개수가 달라져서?)
 - 그룹 함수는 NULL값 제거 후 연산을 수행
 - `SUM`
-- ``AVG`
+- `AVG`
 - `MIN`
-- ``MAX`
+- `MAX`
 - `COUNT`
 
 
@@ -311,4 +311,99 @@ FULL JOIN    DEPARTMENT USING(DEPT_ID);
 ```
 
 
+
+### SUB QUERY
+
+- ( ) 로 묶어서 표현
+
+- ;을 사용하지 않는다
+
+- SELECT, FROM, WHERE, HAVING, GROUP BY 에서 사용 가능
+
+- 단일 행 서브쿼리 (단일 열 , 다중 열)
+
+  - 단일 행 비교 연산자 ( =. > 등) 사용
+
+- 다중 행 서브쿼리 (단일 열 , 다중 열)
+
+  - 다중 행 비교 연산자( IN, NOT IN, ANY, ALL 등 ) 사용
+  - <u>NOT IN (NULL 이 포함된 다중행 서브쿼리) 의 결과는 NULL</u>
+
+- 다중 열 서브쿼리를 받을때는 <u>괄호 필수</u>
+
+  ```sql
+  WHERE (SALARY, JOB_ID) IN (SELECT TRUNC(AVG(SALARY), -5), JOB_ID
+                              FROM EMPLOYEE
+                              GROUP BY JOB_ID)
+  ```
+
+  
+
+#### scala query
+
+```sql
+SELECT [ 특정 COLUMN | EXPR(SELECT - (SUBQUERY)) | DISTINCT | AS 별칭]
+```
+
+- `SET OPERATOR` 두개 이상의 쿼리 결과를 하나로 결합
+  - 결합하려는 쿼리는 <u>COLUMN 개수</u>와 <u>데이터 타입</u>이 동일해야 함. (DUMMY COLUMN 넣어서 맞추는것 가능)
+  - UNION : A 합 B
+  - UNION ALL : A + B
+  - INTERSECT : A 교 B
+  - MINUS : A - B
+
+#### inline view
+
+```sql
+FROM [SELECT - (SUBQUERY)]
+```
+
+
+
+#### ANY  연산자
+
+- `< ANY` : 비교 대상 중 최대 값 보다 작음
+- `> ANY` : 비교 대상 중 최소 값 보다 큼
+
+#### ALL 연산자
+
+- `< ALL` : 비교 대상 중 최소 값 보다 작음
+- `> ALL` : 비교 대상 중 최대 값 보다 큼
+
+
+
+### 상관관계 서브쿼리(Correlated SubQuery)
+
+메인 -> 서브 -> 메인 순서로 실행되며 데이터를 넘기는 서브쿼리
+
+```sql
+SELECT  EMP_NAME, JOB_TITLE, SALARY
+FROM    EMPLOYEE E
+JOIN    JOB J ON(E.JOB_ID = J.JOB_ID)
+WHERE   SALARY = ( SELECT   TRUNC(AVG(SALARY), -5)
+                    FROM    EMPLOYEE
+                    WHERE   JOB_ID = E.JOB_ID )
+```
+
+
+
+`EXISTS` , `NOT EXISTS` : 서브쿼리의 T/F 만을 확인하여  T/F일때만 출력
+
+```sql
+SELECT EMP_ID,
+        EMP_NAME,
+        '관리자' AS 구분
+FROM EMPLOYEE E
+WHERE EXISTS (SELECT NULL
+                FROM EMPLOYEE
+                WHERE E.EMP_ID = MGR_ID)
+-------------------------------------------------
+SELECT EMP_ID,
+        EMP_NAME,
+        '직원' AS 구분
+FROM EMPLOYEE E2
+WHERE NOT EXISTS (SELECT NULL
+                FROM EMPLOYEE
+                WHERE E2.EMP_ID = MGR_ID)
+```
 
