@@ -407,3 +407,147 @@ WHERE NOT EXISTS (SELECT NULL
                 WHERE E2.EMP_ID = MGR_ID)
 ```
 
+
+
+### ERD (Entity Relationship Diagram)
+
+![img](README.assets/273F203D5926E4351E)
+
+![img](README.assets/222281355926EADB37)
+
+### ROWNUM
+
+값의 순서로 정렬된 목록에서 특정 부분을 가져올때 사용 됨 (서브쿼리 두번 사용)
+
+```sql
+-- TOP-N 분석
+SELECT      ROWNUM, EMP_NAME, SALARY
+FROM        SELECT      EMP_NAME, SALARY
+            FROM        (   SELECT DEPT_ID, ROUND(AVG(SALARY), -3) AS AVGSAL  -- AVG 구하는 
+                            FROM EMPLOYEE
+                            GROUP BY DEPT_ID    ) X
+            JOIN        EMPLOYEE A ON(A.DEPT_ID = X.DEPT_ID)
+            WHERE       SALARY > X.AVGSAL
+            ORDER BY 2 DESC    
+WHERE       ROWNUM <= 5
+```
+
+<u>하지만 더 좋은건 `RANK()` 사용하는 방법 (특정 순위만 뽑을수도 있음)</u>
+
+```sql
+SELECT  *
+FROM    (   SELECT EMP_NAME, SALARY, RANK() OVER(ORDER BY SALARY DESC) AS R
+            FROM EMPLOYEE   )
+WHERE   R = 5
+```
+
+
+
+
+
+
+
+## 객체
+
+
+
+### TABLE
+
+#### 1. 테이블 생성 (제약조건)
+
+- `NOT NULL` : COLUMN LEVEL 제약만 가능
+- `UNIQUE` : 중복 허용 X
+- `PRIMARY KEY` : NOT NULL + UNIQUE
+- `FOREIGN KEY` l 
+- `CHECK`
+
+```sql
+DDL(CREATE, DROP, ALTER)
+
+CREATE TABLE TABLE_NAME(
+    COLUMN_NAME DATA_TYPE [DEFAULT EXPR][CONSTRAINT], -- COLUMN LEVEL CONSTRAINT
+    COLUMN_NAME DATA_TYPE [DEFAULT EXPR][CONSTRAINT],
+    COLUMN_NAME DATA_TYPE [DEFAULT EXPR][CONSTRAINT],
+    TABLE_CONSTRAINT -- TABLE LEVEL CONSTRAINT
+)
+
+INSERT INTO TABLE_NAME([COLUMN LIST]) VALUES(VALUE, VALUE) ; -- VALUE의 수와 COLUMN 수 맞아야 함
+```
+
+
+
+예시
+
+```sql
+CREATE TABLE TEST_MEMBER( --TABLE 당 PRIMARY KEY는 하나만 존재할 수 있음
+    ID  VARCHAR2(50) PRIMARY KEY,
+    PWD VARCHAR2(50) NOT NULL,
+    ADDR    VARCHAR2(50) DEFAULT 'SEOUL'
+    UNIQUE(ID)
+    PRIMARY KEY(ID, PWD) -- 이렇게 하면 두개 조합이 PRIMARY KEY 가 된다.
+)
+INSERT INTO TEST_MEMBER(ID, PWD, ADDR) VALUES('JSLIM', 'JSLIM', 'SEOUL');
+INSERT INTO TEST_MEMBER VALUES('jslim', 'JSLIM', NULL);
+INSERT INTO TEST_MEMBER(ID, PWD) VALUES('ADMIN', 'JSLIM');`
+```
+
+
+
+PRIMARY KEY를 FOREIGN KEY로 전이받는 COLUMN 만들기
+
+```sql
+CREATE TABLE TABLE_NAME(
+	COLUMN_NAME	VARCHAR2(50) REFERENCES TABLE_NAME(COLUMN_NAME), -- 해당 COLUMN에는 NULL 이나 부모의 값만 들어갈 수 있음.
+    COLUMN_NAME VARCHAR2(50)
+    FOREIGN KEY(COLUMN_NAME) REFERENCES TABLE_NAME(COLUMN_NAME) -- 이런 TABLE CONST 형태도 가능
+)
+```
+
+`PRIMARY KEY (A, B)` 와 같이 composite 된 PK를 전이 받을때는 두번째 방법으로 해야 한다.
+
+
+
+### VIEW
+
+TABLE - 물리적, VIEW - 논리적(파일 생성 안됨)
+
+- 보안의 목적
+- 복잡한 QUERY를 단순하게 만들기 위해 사용
+
+```sql
+CREATE OR REPLACE VIEW VIEW_NAME(ALIAS) -- ALIAS 값이 열 이름으로 들어감(별칭)
+AS SUBQUERY ;
+```
+
+`DROP VIEW VIEW_NAME` 으로 메모리에서 삭제 가능
+
+
+
+### SEQUENCE 
+
+- `START WITH` : 시작값 설정 (설정 안하면 1부터 증가)
+- `INCREMENT BY` : 증가 단위 설정 (안하면 1씩 증가)
+- `MAXVALUE` : 최대 값 제한 (넘어가면 오류 발생)
+- `NOCYCLE` : 
+- `NOCACHE` : 
+
+연속되는 값을 하나씩 반환
+
+```sql
+CREATE SEQUENCE SEQ_NAME;
+```
+
+
+
+### UPDATE / DELETE
+
+```sql
+UPDATE  TABLE_NAME
+SET     [COLUMN_NAME = VALUE,]
+WHERE   CONDITION; -- 조건이 없으면 모든 값이 다 바뀌므로, 조건을 잘 사용하자!
+				-- PRIMARY KEY  혹은 UNIQUE COLUMN 을 사용하는것이 보편적
+DELETE
+FROM    TABLE_NAME
+WHERE   CONDITION;
+```
+
