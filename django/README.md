@@ -51,6 +51,8 @@ view 는 model을 통해 db를 처리하고, template을 통해 html 렌더링 �
 - POST : 입력 데이터가 URL에 노출되지 않고 요청 메세지 바디에 들어감
 - GET : 입력 데이터가 url 뒤 ?이후에 노출되어 전달됨
 
+> py 파일에 작성할때는 모두 대문자로 작성해야 함. `request.POST['abc']` 
+
 
 
 ### 기초
@@ -84,6 +86,12 @@ def chart(request):
 ` a = {{key}}` 와 같은 형태로 변수에 넣어  `<script>` 영역에서도 사용 가능
 
 
+
+#### views.py 에서 화면 표시하기
+
+- `JsonResponse()`
+- `render()` : 현재 페이지 위에 html을 덮어씌우는 느낌. 주소가 변경되지 않음.
+- `redirect()` : urls.py에 적힌 이름에 따라 해당 함수도 같이 실행됨. (view 내부에서 변경된 데이터를 반영해서 새로 request 후에 페이지 불러오는 느낌) : <u>함수가 함수를 호출하는게 불가능하기 때문에!</u>
 
 
 
@@ -150,7 +158,7 @@ py 에서 data를 다양한 방법으로 입력해서 json으로 변경해서
 <input type="password" name="user_pwd" id="user_pwd">
 
 <script>
-$('.ajaxBtn').click(function(){             //버튼이 눌리면 실행
+$('.ajaxBtn').click(function(){              //버튼이 눌리면 실행
      $.ajax({
          url : '{% url "nonParamAjax" %}',   //정보를 가져오려는 page 호출
          type : 'post',   //post 방식
@@ -236,6 +244,244 @@ $(document).ready(function() {
 })
 </script>
 ```
+
+
+
+### APP 추가 (2개 이상 추가할 경우)
+
+`setting.py`
+
+- INSTALLED_APPS 추가
+
+- staticfiles_dirs 추가  (setting.py)
+
+  - ```python
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, '앱이름', 'static')
+    ]
+    ```
+
+- base_dir 수정 (setting.py)
+
+  - ```python
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    ```
+
+- static_root 추가 (setting.py)
+
+  - ```python
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    ```
+
+- templates base dir 추가
+
+  - ![image-20210127093300825](README.assets/image-20210127093300825.png)
+
+  - 뒤에 들어가는건 기본 프로젝트 경로의 templates 폴더 (새로 만들어줘야 함) : 각 App 에서 공통으로 사용하고자 하는 template을 기본 프로젝트에 만들어 놓고 공통으로 사용하기 위함
+
+    
+
+- database dir 추가
+
+  - ![image-20210127103244813](README.assets/image-20210127103244813.png)
+
+
+
+- header, footer 공통 사용
+
+  - home.html
+
+  ```html
+  {% include 'header.html' %}
+  
+  {% block content %}
+  
+  <!-- Main content -->
+  
+  {% endblock %}
+  
+  {% include 'footer.html' %}
+  ```
+
+  - header.html  / footer.html
+
+  ```html
+  {% load static %}   <!--맨 위에 추가 -->
+  ```
+
+  
+
+  
+
+- 각 App에 흩어져 있는 static file을 한곳으로 모으기
+
+  터미널에서 ` python manage.py collectstatic` -> root에 static 폴더 생성됨
+
+
+
+
+
+### model 연동
+
+`models.py` 에 class 를 생성해주고, `admin.py`에 등록해주는 과정 필요
+
+
+
+#### migration
+
+models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class BbsUserRegister(models.Model):    # db 에서 table 생성과 비슷
+    user_id = models.CharField(max_length=50)   #sql에서 column 과 같은 느낌
+    user_pwd = models.CharField(max_length=50)
+    user_name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.user_id + "" + self.user_pwd + "" +self.user_name
+```
+
+admin.py
+
+```python
+from django.contrib import admin
+from .models import *
+
+# Register your models here.
+admin.site.register(BbsUserRegister)
+```
+
+terminal
+
+`python manage.py makemigrations`
+
+`python manage.py migrate` 
+
+
+
+#### superuser 등록
+
+terminal
+
+`python manage.py createsuperuser`
+
+이후 username. password 입력해서  admin 계정 생성 -> /admin 에서 로그인 후 db 관리 가능
+
+
+
+#### db 에서 데이터 가져오기 (db 연동)
+
+
+
+views.py
+
+```python
+from .models import *
+
+def loginProc(request):
+
+    print('request - loginProc') # 디버그
+    
+    if request.method == 'GET':
+        return redirect('index')
+    elif request.method == 'POST':
+        id = request.POST['id']
+        pwd = request.POST['pwd']
+    user = BbsUserRegister.objects.filter(user_id = id, user_pwd = pwd) #user를 queryset 형식으로 반환
+    #    user = BbsUserRegister.objects.get()    # user에 들어있는 값을 반환
+    print(user, type(user))
+    if user is not None:
+        return redirect('home')
+    else :
+        return redirect('index')
+```
+
+
+
+#### orm 함수
+
+
+
+##### 선택 
+
+select * from table where id = xxx, and pwd = xxx 인 경우
+
+- `modelName.objects.all()` : 모두 가져온다
+- ` modelName.objects.get(id = xxx, pwd = xxx)`
+- ` modelName.objects.filter(id = xxx, pwd = xxx)`
+
+select * from table where id = xxx, orpwd = xxx 인 경우
+
+- ` modelName.objects.filter(Q(id = xxx) | Q(pwd = xxx))`    :  조금 특이한 문법!
+
+select * from table where subject like '%공지%'
+
+- ` modelName.objects.filter(subject_icontains='공지')`
+
+select * from table where subject like '%공지'
+
+- ` modelName.objects.filter(subject_endswith='공지')`
+
+select * from table where subject like '공지%'
+
+- ` modelName.objects.filter(subject_startswith='공지')`
+
+
+
+##### 삽입
+
+insert into table values()
+
+- `model(attr=value, attr=value)`
+- `model.save()`
+- ` x = model(attr=value, attr=value)` 과 같은 방식으로 <u>instance를 만들어 사용</u>해야 함 ->  `x.xave()`
+
+##### 삭제
+
+delete * from tableName where id = xxx
+
+- `modelName.objects.get(id=xxx).delete()`
+
+##### 업데이트
+
+update tableName set attr = value where id = xxx
+
+- `obj = modelName.objects.get(id=xxx)`
+- `obj.attr = value`
+- `obj.save()`    :  commit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
