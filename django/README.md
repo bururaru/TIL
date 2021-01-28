@@ -91,7 +91,7 @@ def chart(request):
 
 - `JsonResponse()`
 - `render()` : 현재 페이지 위에 html을 덮어씌우는 느낌. 주소가 변경되지 않음.
-- `redirect()` : urls.py에 적힌 이름에 따라 해당 함수도 같이 실행됨. (view 내부에서 변경된 데이터를 반영해서 새로 request 후에 페이지 불러오는 느낌) : <u>함수가 함수를 호출하는게 불가능하기 때문에!</u>
+- `redirect()` : urls.py에 적힌 이름에 따라 해당 함수도 같이 실행됨. (view 내부에서 변경된 데이터를 반영해서 새로 request 후에 페이지 불러오는 느낌) : <u>함수가 함수를 호출하는게 불가능하기 때문에!</u> : views에서 정의된 함수 이름에 연결된 페이지로 유지되면서 그 위에 render에서 호출한 html 파일이 덧씌워짐
 
 
 
@@ -144,13 +144,32 @@ $.each()
   alert(param)
   ```
 
-  
+
+
+#### 페이지 이동 
+
+` location.href = '경로'`
+
+```html
+<script>
+	$(document).ready(function() {
+		$('#newBtn').click(function() {
+			location.href = '../bbsRegisterForm'    //페이지 경로 맞추어 입력
+                    // path('bbsRegisterForm/', views.abc, name='abc') in views.py
+		})
+	})
+</script>
+```
+
+
+
+
 
 #### ajax - 비동기 통신
 
 서버에서 클라이언트를 호출하는 느낌 : page reloading 없이 페이지 수정
 
-py 에서 data를 다양한 방법으로 입력해서 json으로 변경해서 
+.py 에서 data를 다양한 방법으로 입력해서 json으로 변경해서 
 
 ```html
 <button class="ajaxBtn">ajaxBtn</button>
@@ -409,7 +428,7 @@ def loginProc(request):
 
 select * from table where id = xxx, and pwd = xxx 인 경우
 
-- `modelName.objects.all()` : 모두 가져온다
+- `modelName.objects.all()` : 모두 가져온다   (아무것도 안쓰면 all이 기본 적용인듯?) ([링크](https://docs.djangoproject.com/en/3.1/topics/db/queries/))
 - ` modelName.objects.get(id = xxx, pwd = xxx)`
 - ` modelName.objects.filter(id = xxx, pwd = xxx)`
 
@@ -455,11 +474,113 @@ update tableName set attr = value where id = xxx
 
 
 
+### CRUD
+
+
+
+#### 세션
+
+세션으로 삽입된 data는 모든 html에서 사용할 수 있게 됨 (단순 context 전달과 다름) -> <u>views.py 에서 세션을 사용한 모든 함수는 context로 값을 넘겨줘야 함.</u>
+
+views.py
+
+```python
+def loginProc(request):
+    context = {}
+    user = BbsUserRegister.objects.all()
+    request.session['user_name'] = user.user_name
+    request.session['user_id'] = user.user_id
+    context['name'] = request.session['user_name']
+    context['id'] = request.session['user_id']
+    return render(request, 'home.html', context)
+```
 
 
 
 
 
+#### 쿠키
+
+
+
+#### html 내부의 반복출력
+
+```html
+<tbody id="tbody">
+	{% for x in boards %}              <!-- 이부분이 시작 -->
+	<tr>
+		<td>{{x.id}}</td>
+		<td><a href="OOO">{{x.title}}</a></td>
+		<td>{{x.writer}}</td>
+		<td>{{x.regdate}}</td>
+		<td><span class="badge bg-red">{{x.viewcnt}}</span></td>
+	</tr>
+    {% endfor %}                         <!-- 이부분이 끝 -->
+</tbody>
+```
+
+```python
+def bbs_list(request):
+    boards = Bbs.objects.all()
+    return render(request, 'list.html', context)
+```
+
+```python
+class Bbs(models.Model):
+    # id = models.AutoField(primary key = True)
+    title = models.CharField(max_length=100)
+    writer = models.CharField(max_length=100)
+    content = models.TextField()
+    regdate = models.DateTimeField(default=timezone.now())
+    viewcnt = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.title +" "+ self.writer
+```
+
+
+
+#### html 내부의 조건 출력
+
+```html
+{% if boards %}                        <!-- 조건문 시작 -->
+<table class="table table-bordered">
+	<tr>
+		<th>TITLE</th>
+	</tr>
+
+	<tbody id="tbody">
+	{% for x in boards %}
+	<tr>
+		<td><a href="OOO">{{x.title}}</a></td>
+	</tr>
+    {% endfor %}
+	</tbody>
+</table>
+{% else %}                        <!-- else -->
+	<p>데이터 없음</p> 
+{% endif %}                       <!-- 조건문 끝 -->
+```
+
+
+
+####  페이지 이동시 규칙을 가지고 이동
+
+django 만의 독특한 방법
+
+` {% url 'url 이름' 변수=값 %}`   -> views.py , urls.py 에 조금 다르게 선언 필요
+
+```html
+<a href="{% url 'bbs_read' ids=값 %}">
+```
+
+```python
+path('bbs_read/<int:ids>', views.bbs_read, name='bbs_read')
+```
+
+```python
+def bbs_read(request, ids):
+```
 
 
 
