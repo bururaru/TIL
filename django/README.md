@@ -148,7 +148,7 @@ $.each()
 
 #### 페이지 이동 
 
-` location.href = '경로'`
+` location.href = '경로'` : GET 방식
 
 ```html
 <script>
@@ -161,7 +161,32 @@ $.each()
 </script>
 ```
 
+특수 문법
 
+`<a href=../경로/"+추가되는 값+">`
+
+```javascript
+txt +="<td><a href=../bbs_read/"+obj.id+">"+obj.title+"</a></td>";
+```
+
+
+
+POST 방식으로 넘기고 싶으면???
+
+```html
+<form method="post" id="removeFrm">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{board.id}}">
+</form>
+```
+
+```javascript
+$('.btn-danger').click(function () {
+    $('#removeFrm').attr('action', "{% url 'bbs_remove' %}").submit()
+})
+```
+
+​	이런 방식으로 빈 form을 만들고 action 을 jquery로 추가하는 방식으로 만들면 됨
 
 
 
@@ -196,6 +221,8 @@ $('.ajaxBtn').click(function(){              //버튼이 눌리면 실행
  })
  </script>
 ```
+
+​	위와 같이 html 을 반복문으로 모두 만들어 놓고, rendering 하는 방법으로 접근!
 
 ```python
 urlpatterns = [
@@ -438,15 +465,15 @@ select * from table where id = xxx, orpwd = xxx 인 경우
 
 select * from table where subject like '%공지%'
 
-- ` modelName.objects.filter(subject_icontains='공지')`
+- ` modelName.objects.filter(subject__icontains='공지')`
 
 select * from table where subject like '%공지'
 
-- ` modelName.objects.filter(subject_endswith='공지')`
+- ` modelName.objects.filter(subject__endswith='공지')`
 
 select * from table where subject like '공지%'
 
-- ` modelName.objects.filter(subject_startswith='공지')`
+- ` modelName.objects.filter(subject__startswith='공지')`
 
 
 
@@ -474,7 +501,7 @@ update tableName set attr = value where id = xxx
 
 
 
-### CRUD
+### C.R.U.D
 
 
 
