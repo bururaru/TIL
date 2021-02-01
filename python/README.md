@@ -182,9 +182,7 @@ range(2, 50, 2) #2~49까지 2씩 커지는 값들만
 
 > import해서 사용해야 함
 
-`from datetime import date` 이나 `from datetime import datetime` 으로 import
-
-한번에 그냥 `import datetime` 으로 import 하는것도 괜찮을지도?
+`from datetime import date` 이나 `from datetime import datetime` import 필요
 
 
 
