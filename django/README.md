@@ -611,9 +611,45 @@ def bbs_read(request, ids):
 
 
 
+### 파일 업로드
 
+`enctype="multipart/form-data" ` 가 필요
 
+```html
+<form method="post"
+      action="xxx"
+      enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>.csv파일 업로드 해주세요</label>
+        <input type="file" class="form-control" name="csv_file">
+    </div>
+    <button type="submit" class="btn btn-info">업로드</button>
+</form>
+```
 
+```python
+def csvUpload(request):
+    file = request.FILES['csv_file']
+    if not file.name.endswith('.csv'):
+        return redirect('index')
+    result_file = file.read().decode('utf-8').splitlines()
+    reader = csv.reader(result_file)
+    list = []
+    for x in reader:
+        print(x)
+        list.append(csvModel(name=x[0], img=x[1], status=x[2])
+    file.close()
+    csvModel.objects.bulk.create(list)   #리스트를 모델에 넣는 과정
+    return redirect('index')
+```
+
+```python
+class csvModel(models.Model):
+    name = models.CharField(max_length=100)
+    img = models.CharField(max_length=100)
+    status = models.TextField()
+```
 
 
 
