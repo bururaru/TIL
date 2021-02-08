@@ -463,17 +463,23 @@ select * from table where id = xxx, orpwd = xxx 인 경우
 
 - ` modelName.objects.filter(Q(id = xxx) | Q(pwd = xxx))`    :  조금 특이한 문법!
 
-select * from table where subject like '%공지%'
+문자열을 포함하는 단어 검색(i = 대소문자 무시 검색)
 
 - ` modelName.objects.filter(subject__icontains='공지')`
 
-select * from table where subject like '%공지'
+문자열로 끝나는 단어 검색
 
 - ` modelName.objects.filter(subject__endswith='공지')`
 
-select * from table where subject like '공지%'
+문자열로 시작하는 자료 검색
 
 - ` modelName.objects.filter(subject__startswith='공지')`
+
+xx 보다 같거나 작다
+
+- `modelName.objects.filter(subject__lte=30)`
+
+
 
 
 
@@ -485,11 +491,15 @@ insert into table values()
 - `model.save()`
 - ` x = model(attr=value, attr=value)` 과 같은 방식으로 <u>instance를 만들어 사용</u>해야 함 ->  `x.xave()`
 
+
+
 ##### 삭제
 
 delete * from tableName where id = xxx
 
 - `modelName.objects.get(id=xxx).delete()`
+
+
 
 ##### 업데이트
 
@@ -498,6 +508,26 @@ update tableName set attr = value where id = xxx
 - `obj = modelName.objects.get(id=xxx)`
 - `obj.attr = value`
 - `obj.save()`    :  commit
+
+
+
+##### FK table 불러오기
+
+- _set.all : FK로 묶여있는 자식테이블의 요소를 list로 접근 (따로 선언 필요 없음)
+
+> 부모테이블 : Food - food_name, food_price
+>
+> 자식테이블 : Fruit - apple, pear, mango     인 경우
+
+```html
+{% for x in food.fruit_set.all %}
+<div>
+    {{x.fruit_color}}
+</div>
+{% endfor %}
+```
+
+와 같은 방법으로 apple, pear, mango를 하나씩 꺼낼 수 있다.
 
 
 
