@@ -163,6 +163,12 @@ print(ary[1:2, 2])
     ax = a.flatten()
     ```
 
+  - `astype()` : dtype을 외부에서 변경
+  
+    ```python
+    re_type = z.astype(np.int32)
+    ```
+  
     
 
 #### 배열의 요소 접근
@@ -225,7 +231,214 @@ print(ary[1:2, 2])
   vec_t = vec.reshape(1, 10).T
   ```
 
+
+
+
+#### 배열의 확장
+
+- `hstack` : 가로방향 병합 (행의 개수가 동일해야 병합 가능)
+
+  ```python
+  np.hstack([x, y])
+  ```
+
+- `vstack` : 세로방향 병합 (열의 개수가 동일해야 가능)
+
+  ```python
+  np.vstack([x, y])
+  ```
+
+- `dstack` : 깊이 방향 병합
+
+  ```python
+  np.dstack([x, y])             #stack([x, y], axis=0) 과 동일
+  ```
+
+- `stack` : 두개의 배열을 병합할때 차원을 증가시킴 ( 배열의 크기가 같아야 함)
+
+  ```python
+  np.stack([x, y], axis=0)   ->  # (2, m, n ) 모양의 배열 생성
+  np.stack([x, y], axis=1)   ->  # (m, 2, n ) 모양의 배열 생성
+  np.stack([x, y], axis=2)   ->  # (m, n, 2 ) 모양의 배열 생성
+  ```
+
   
+
+- `r_` : row 방향 병합 (indexer 라 불리고 벡터 결합에 주로 사용)
+
+  ```python
+  np.r_[np.array([1,2,3]), np.array([4,5,6])]
+  # array([1, 2, 3, 4, 5, 6])
+  ```
+
+- `c_` : column 방향 병합 (indexer 라 불리고 벡터 결합에 주로 사용)
+
+  ```python
+  np.c_[np.array([1,2,3]), np.array([4,5,6])]
+  # 	array([[1, 4],
+  #        [2, 5],
+  #        [3, 6]])
+  ```
+
+- `tile` : 동일한 배열을 반복하여 연결
+
+  ```python
+  np.tile(x, 3)           #반복 횟수를 지정
+  np.tile(x, (3,2))       #행 방향으로 3번, 열 방향으로 2번 반복
+  ```
+
+- `delete()` : 특정한 행, 열을 삭제 (row data는 변경하지 않고 새로운 배열을 리턴)
+
+  ```python
+  ary = np.array( [[6 5 0 0]
+                   [3 9 4 2]
+                   [0 1 1 6]] )
+  result = np.delete(ary, 1,  axis=0)     # 1번째 index, 0(행) 삭제
+  result = np.delete(ary, 2,  axis=1)     # 2번째 index, 1(열) 삭제
+  ```
+
+- `loadtxt()` : csv 파일 읽기
+
+  ```python
+  row_data = np.loadtxt('./data/crime_in_Seoul.csv', delimiter="\t", dtype=np.object, skiprows=1)      #첫번째 행 제외 가능
+  ```
+
+
+
+#### 벡터 연산
+
+```python
+x = np.array([1,2,3])
+y = np.array([3,4,3])
+```
+
+- 비교
+
+  - `x == y`
+  - `x >= y`
+  - `np.all(x == y)` : 모든 원소가 동일한지 비교
+
+- 스칼라 연산
+
+  - `x  * 10` : 모든 원소에 *10
+
+- broadcasting : 행렬의 모양이 같지 않아도 자동으로 크기를 맞추어 계산해주는 기능 (행과 열 중에 크기가 하나는 같아야 하는것 같다?)
+
+  
+
+- `np.newaxis` 데이터는 그대로 차원을 하나 증가시킨다
+
+  ```python
+  y = np.arange(5)[:, np.newaxis]                #.reshape(5,1) 과 동일
+  ```
+
+  - newaxis 하기 전 배열
+
+    ![image-20210223132606086](Numpy, pandas.assets/image-20210223132606086.png)
+
+  - newaxis 이후 배열
+
+    ![image-20210223132548687](Numpy, pandas.assets/image-20210223132548687.png)
+
+- 최대, 최소, 평균, 합 
+
+  - 모든 함수들은 `axis=n` 옵션을 이용해 연산을 수행하는 행,열을 지정할 수 있음 
+  - `.min()`
+  - `.max()`
+  - `.argmin()` : 최솟값을 가지는 위치를 반환
+  - `.argmax()` : 최댓값을 가지는 위치를 반환
+  - `.sum()`
+  - `.mean()` 
+
+  
+
+#### 배열의 정렬
+
+- ##### 벡터의 정렬
+
+```python
+ary = np.arange(10)
+```
+
+- `np.random.shuffle(ary)` : 순서 섞기 (리턴값 없음 = 배열 자체를 변화시킴)
+- `ary.sort()` : 정렬 (리턴값 없음)
+- `np.sort(ary)` : 정렬 (리턴값 있음)
+- `np.sort(ary)[::-1]` : 내림차순 정렬 (리턴값 있음)
+
+- ##### 배열의 정렬
+
+  정렬 방향이 조금 헷갈린다 -> axis에서 표시해준 '축'을 기준으로 정렬된다 라고 기억!
+
+```
+ax =  [[ 9 16  0 13]
+       [10 11 14 10]
+       [ 2  1 11  0]
+       [12 14  2 11]]
+```
+
+- `ary.sort(axis=0)` : 열방향 정렬
+
+  ```
+  [[ 2  1  0  0]
+   [ 9 11  2 10]
+   [10 14 11 11]
+   [12 16 14 13]]
+  ```
+
+- `ary.sort(axis=1)` : 행방향 정렬
+
+  ```
+  [[ 0  0  1  2]
+   [ 2  9 10 11]
+   [10 11 11 14]
+   [12 13 14 16]]
+  ```
+
+  
+
+- ##### 특정 열을 기준으로 정렬하기 
+
+  **주의할점 : `argsort`는 정렬 후 해당 원소의 기존 index를 반환한다.**
+
+  [46, 99, 100, 71]   ->  [0, 3, 1, 2]
+
+  ```python
+  # 1번째 행을 기준으로 정렬
+  ary = np.array([[  1,    2,    3,    4],
+                 [ 46,   99,   100,   71],
+                 [ 81,   59,   90,  100]])
+  ary1 = ary[:,ary[1].argsort()]
+  # 결과는 다음과 같이 출력
+  # array([[  1,   4,   2,   3],
+  #        [ 46,  71,  99, 100],
+  #        [ 81, 100,  59,  90]])
+  ```
+
+#### row, column 추가
+
+- `.concatenate()` : 합치려는 방향의 dimension을 맞춰줘야 한다.
+
+```python
+x = np.array([[1,2,3],[4,5,6]])
+y = np.array([7,8,9])
+z = np.concatenate( (x, y.reshape(1,3)), axis=0)   # axis=0 은 행 추가
+# 결과
+# [1 2 3]
+# [4 5 6]
+# [7 8 9]
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 # pandas
 
