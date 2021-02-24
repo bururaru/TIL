@@ -299,6 +299,26 @@ print(ary[1:2, 2])
 
 - `loadtxt()` : csv 파일 읽기
 
+  - 자료형 dtype
+  
+    - `np.object` : python 객체에 대한 포인터를 저장하는 자료형
+    
+      각 열마다 다른 데이터 자료형을 가지게 된다. (값 입력도 더 자유로움)
+    
+      ```python
+      x = np.array([100, 0.001, 'str'], dtype=np.object) 
+      print(x) 
+      print(x.dtype) 
+      # [100 0.001 'str']
+      # object 
+      print(type(x[0])) 
+      print(type(x[1])) 
+      print(type(x[2])) 
+      # <class 'int'> 
+      # <class 'float'> 
+      # <class 'str'>
+      ```
+  
   ```python
   row_data = np.loadtxt('./data/crime_in_Seoul.csv', delimiter="\t", dtype=np.object, skiprows=1)      #첫번째 행 제외 가능
   ```
@@ -430,9 +450,30 @@ z = np.concatenate( (x, y.reshape(1,3)), axis=0)   # axis=0 은 행 추가
 
 
 
+#### 통계 관련 함수
 
+```
+x = np.array()
+```
 
+- `np.random.rand() ` : 0~1 사이 균일한 분포 값 리턴
 
+- `np.random.randn(size)` : 정규분포를 따르는 난수 리턴
+
+- `np.random.randint(low, high, size)` : 정수의 난수를 리턴
+
+- `np.percentile(x, 25)` : 하위 25쪽의 4분위수
+
+- `np.random.seed(n)` : 난수를 발생시킬때 seed 에 따라 변하지 않는 난수 발생을 가능하게 한다
+
+- `np.random.choice()` : 샘플 추출
+
+  ```python
+  np.random.choice(ary, size, replace, p)
+  # replace=False -> 한번 추출된건 중복해서 추출되지 않는다
+  ```
+
+- `np.unique(ary, return_counts)` : 배열에서 중복되지 않는 값 하나씩 반환, `return_counts=True` 이면 해당 원소의 개수도 같이 반환 -> 개수까지 포함해서 두개의 배열 리턴
 
 
 
