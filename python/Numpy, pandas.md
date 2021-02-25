@@ -50,7 +50,7 @@
   #array([0, 2, 4, 6, 8])
   ```
 
-- fencing indexing
+- fancy indexing
 
   ```python
   data = np.array([1,2,3,4,5,6,7,8,9])
@@ -475,11 +475,142 @@ x = np.array()
 
 - `np.unique(ary, return_counts)` : 배열에서 중복되지 않는 값 하나씩 반환, `return_counts=True` 이면 해당 원소의 개수도 같이 반환 -> 개수까지 포함해서 두개의 배열 리턴
 
+- `np.random.normal(평균, 표준편차, (행,열) )` : 평균, 표준편차 인 정규분포 난수 리턴
 
-
-
-
-
+  
 
 # pandas
 
+#### Series 클래스
+
+- numpy 1차원 배열과 비슷 (벡터 연산도 가능)
+
+- series = index + value (index가 같이 포함되어 있음)
+
+- `x.values` : 값만 가져올 수 있음 (type : numpy.ndarray)
+
+- `x.index` : 인덱스만 가져올 수 있음
+
+- index의 라벨은 (정수, 문자, 날짜, 시간) 지정 가능
+
+  ```python
+  ary = pd.Series([1,2,3,4,5], dtype=np.object, index=['강남', '서초', '방배', '동작', '도봉'])
+  ```
+
+- `x.index.name = ' '` : index에 이름 추가 (table head)
+
+- index로 value 호출
+
+  ```python
+  ary['서초']
+  # 2
+  ary[['서초', '강남']]        #2개 이상은 list 형식으로 넣어줘야 한다
+  # 서초    2
+  # 강남    1
+  # dtype: object
+  ```
+
+- index 와 value 쌍 순차적 접근
+
+  ```python
+  for idx, value in ary.items():
+  ```
+
+- index에 순차적 접근
+
+  ```python
+  for x in ary.keys():
+  # 또는
+  for x in ary.index:
+  ```
+
+- values 에 순차적 접근
+
+  ```python
+  for x in ary.values:
+  ```
+
+- fancy indexing 가능
+
+  ```python
+  ary[ [0,2] ] #index 0, 2 고르기
+  ```
+
+- boolean indexing 가능
+
+  ```python
+  ary[ ary%2==0 ] # value 조건으로 True인 행 고르기
+  ```
+
+- 활용 예시
+
+  ```python
+  #평균 70이고 편차 8인 정규분포 오늘날짜부터 10일간?
+  strDay = date.today(0)
+  fac2 = pd.Series([float(x) for x in np.random.normal(70, 8, (10,))], index=[ strDay + timedelta(days=y) for y in range(10)])
+  ```
+
+
+
+
+#### DataFrame
+
+```python
+x = pd.DataFrame()
+```
+
+- `x.values` : 내용 출력, (np.ndarray 타입)
+
+- `x.index` : 행 index 출력
+
+- `x.index.name='y'` : index에 y 로 이름 붙이기
+
+- `x.columns.name='y'` : columns에 y로 이름 붙이기
+
+- `x.T` : transpose
+
+  
+
+  ##### 열
+
+- `x['new_col_name'] = 'y' ` : new_col_name 이름으로 된 열 추가
+
+- `del x['new_col_name']` : 'new_col_name' 이름의 열 삭제
+
+- `x[ ['col_name1', 'col_name2'] ]` : 선택한 column 만 가져오기
+
+  
+
+  ##### 행
+
+- 반드시 slicing으로 접근 해야함. (index, label indexing)
+
+  ![image-20210225141632337](Numpy, pandas.assets/image-20210225141632337.png)
+
+- `a[ 'col_name']` : Series 반환
+
+- `a[ ['col_name'] ]` : DataFrame 반환
+
+  **위 두개의 차이점을 잘 알고 사용해야 한다!**
+
+
+
+#### Pandas 문자 관련 함수
+
+함수 앞에 str을 붙여서 사용
+
+- `x.head()` : 처음 5개만 출력
+- `x.tail()` : 마지막 7개만 출력
+- `x['col_name'].str[m,n]` : 해당 col_name 에서 str slicing
+- `x['col_name'].str.split(" ", expnad=True)` : 해당 col_name의 문자열 쪼개기 (expand=True 이면 DataFrame, False 이면 Series)
+- `x['col_name'].str.startswith('xxx')` : str 시작 조건을 만족하는지 <u>bool 값으로</u> 리턴
+- `x['col_name'].str.endswith('xxx')` : str 끝나는 조건을 만족하는지 <u>bool 값으로</u> 리턴
+- `x['col_name'].str.contains('xxx')` : str 포함하는 조건을 만족하는지 <u>bool 값으로</u> 리턴
+- `x['col_name'].str.replace('x', 'y')` : 해당 column의 x 부분을 y로 변경 
+- `x['col_name'].str.strip()` : 공백 제거
+- `x['col_name'].str.lstrip()` : 왼쪽 공백 제거
+- `x['col_name'].str.rstrip()` : 오른쪽 공백 제거
+- `x['col_name'].str.lower()` :  소문자로 변환
+- `x['col_name'].str.upper()` : 대문자로 변환
+- `x['col_name'].str.swapcase()` : 대소문자 바꾸기
+- 
