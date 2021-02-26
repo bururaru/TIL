@@ -169,7 +169,7 @@ print(ary[1:2, 2])
     re_type = z.astype(np.int32)
     ```
   
-    
+  - `
 
 #### 배열의 요소 접근
 
@@ -477,6 +477,8 @@ x = np.array()
 
 - `np.random.normal(평균, 표준편차, (행,열) )` : 평균, 표준편차 인 정규분포 난수 리턴
 
+- `np.random.permutation()` : 괄호 안 내용에서 무작위 추출
+
   
 
 # pandas
@@ -613,4 +615,43 @@ x = pd.DataFrame()
 - `x['col_name'].str.lower()` :  소문자로 변환
 - `x['col_name'].str.upper()` : 대문자로 변환
 - `x['col_name'].str.swapcase()` : 대소문자 바꾸기
-- 
+
+
+
+#### Row indexing
+
+​	`x = DataFrame`
+
+- `loc()` : 라벨값 기반의 **2차원** 인덱싱
+  - `x.loc[행 인덱스]` -> 행 추출
+  - `x.loc[행 인덱스 값(슬라이싱), 열 인덱스 값(슬라이싱)] ` -> 교차구간 값 추출
+  - 그냥 인덱싱과 차이
+  - ![image-20210226092709986](Numpy, pandas.assets/image-20210226092709986.png)
+- `iloc()` : 순서를 나타내는 정수 기반의 2차원 인덱싱
+  - `x.iloc[m, n]` : 행,열 인덱스 **number**로 접근
+  - `x.iloc[행 번호]` : 행 번호로 접근
+
+#### DataFrame 조작
+
+` x = series` `y = DataFrame`
+
+- `x.count()` : 포함하고 있는 값의 개수 반환
+
+- `y.count()` : 열이 포함하고 있는 값의 개수 반환
+
+- `y['col_name'].value_counts()` : 해당 열이 가지는 값들이 몇개씩 있는지 개수 반환
+
+- `drop(label, axis, inplace=T/F)` : axis 0 이면 행 제거, 1이면 열 제거, inplace=F이면 원본은 변경하지 않고 사본 생성
+
+- `y.reindex(index, columns)` : index와 columns 재지정 (순서 변경도 가능)
+
+- `y.sort_index(axis, ascending)` : index 혹은 columns 순서 정렬
+
+- `y.sort_values(by='column_name')` : column 의 값을 기준으로 index 정렬 (column_name 여러개를 리스트 형식으로 넣어주면 순차적 우선순위를 가지고 정렬)
+
+- `y.sum(axis)` : axis=0 이면 행방향 합계 : 각 열의 모든 행 값의 합
+
+- `y.mean(axis)` : axis=0 이면 행방향 평균 : 각 열의 모든 행 값의 평균 
+
+  
+
