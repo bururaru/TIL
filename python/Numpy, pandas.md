@@ -631,7 +631,9 @@ x = pd.DataFrame()
   - `x.iloc[m, n]` : 행,열 인덱스 **number**로 접근
   - `x.iloc[행 번호]` : 행 번호로 접근
 
-#### DataFrame 조작
+#### DataFrame Data 조작
+
+(참조 링크 : https://datascienceschool.net/01%20python/04.04%20%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%98%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A1%B0%EC%9E%91.html)
 
 ` x = series` `y = DataFrame`
 
@@ -653,5 +655,109 @@ x = pd.DataFrame()
 
 - `y.mean(axis)` : axis=0 이면 행방향 평균 : 각 열의 모든 행 값의 평균 
 
+- `y.apply(lambda)` : 행이나 열 단위로 복잡한 데이터 가공이 필요할 때 사용
+
+  ```python
+  # DataFrame에 적용
+  DataFrame.apply(lambda x : x.max() - x.min() )
+  # Series에 적용
+  DataFrame['col_name'].apply(lambda x : len(str(x)))
+  ```
   
+- `y.fillna('value')` : NaN 값을 원하는 값으로 변경
+
+  
+
+#### DataFrame index 조작
+
+- `set_index` : 기존의 행 인덱스를 제거하고 데이터 열 중 하나를 인덱스로 설정
+- `reset_index ` : 기존의 행 인덱스를 제거하고 인덱스를 데이터 열로 추가
+
+
+
+#### DataFrame 합성
+
+```python
+df1 = pd.DataFrame({'a': ['a0', 'a1', 'a2', 'a3'],
+                    'b': ['b0', 'b1', 'b2', 'b3'],
+                    'c': ['c0', 'c1', 'c2', 'c3']},
+                    index=[0, 1, 2, 3])
+ 
+df2 = pd.DataFrame({'a': ['a2', 'a3', 'a4', 'a5'],
+                    'b': ['b2', 'b3', 'b4', 'b5'],
+                    'c': ['c2', 'c3', 'c4', 'c5'],
+                    'd': ['d2', 'd3', 'd4', 'd5']},
+                    index=[2, 3, 4, 5])
+```
+
+병합시, 두 DataFrame에서 이름이 같은 열은 키가 되어 병합된다. (index를 키로 사용하려면 `left_index=True`, `right_index=True` 를 설정해줘야 함)
+
+- `concat()` : 데이터 연결
+
+  ```python
+  #기존 인덱스 유지
+  pd.concat([df1, df2])
+  ```
+
+  ![image-20210302130543832](Numpy, pandas.assets/image-20210302130543832.png)
+
+  ```python
+  #기존 인덱스 무시
+  pd.concat([df1, df2], ignore_index=True)
+  ```
+
+  ![image-20210302130725423](Numpy, pandas.assets/image-20210302130725423.png)
+
+  ```python
+  # 열 방향 결합
+  pd.concat([df1, df2], axis=1)
+  ## 교집합 되는 부분만 남기기
+  pd.concat([df1, df2], axis=1, join='inner')
+  ```
+
+  ![image-20210302130918609](Numpy, pandas.assets/image-20210302130918609.png)
+
+
+
+- `merge()` : 데이터 병합
+
+  ```python
+  # 양쪽 데이터 프레임 모두 키가 존재하는 데이터만 보여줌(inner join)
+  pd.merge(df1, df2)
+  # 키 값이 한쪽에만 있어도 보여줌 (outer join)
+  pd.merge(df1, df2, how='outer')
+  # 첫번째 혹은 두번째 데이터프레임의 키 값 모두 보여줌 (left, right)
+  pd.merge(df1, df2, how='left')
+  # 키가 되는 기준열 설정 (합치는 기준이 되는 열 설정)
+  pd.merge(df1, df2, left_on='이름', right_on="성명")
+  ```
+
+
+
+- 일반 데이터 열이 아닌 인덱스를 기준열로 사용하려면 left_index 또는 right_index 인수를 True 로 설정한다. 
+
+```python
+pd.merge(popDF01, popDF02, left_on=['city','year'], right_index=True)
+```
+
+
+
+- `join()` : index를 기준으로 병합이 default
+
+  ```python
+  stock03 = stock01.join(stock02, how='inner')
+  ```
+
+  
+
+#### Groupby  메서드
+
+`groupby` 메서드는 데이터를 그룹 별로 분류하는 역할을 한다. `groupby` 메서드의 인수로는 다음과 같은 값을 사용한다.
+
+- 열 또는 열의 리스트
+- 행 인덱스
+
+연산 결과로 그룹 데이터를 나타내는 `GroupBy` 클래스 객체를 반환한다. 이 객체에는 그룹별로 연산을 할 수 있는 그룹연산 메서드가 있다.
+
+- `GroupByClass.get_group('col_name')` : 그룹의 열 이름으로 해당 데이터만 확인
 
