@@ -760,4 +760,17 @@ pd.merge(popDF01, popDF02, left_on=['city','year'], right_index=True)
 연산 결과로 그룹 데이터를 나타내는 `GroupBy` 클래스 객체를 반환한다. 이 객체에는 그룹별로 연산을 할 수 있는 그룹연산 메서드가 있다.
 
 - `GroupByClass.get_group('col_name')` : 그룹의 열 이름으로 해당 데이터만 확인
+- `.agg()` : 만약 원하는 그룹연산이 없는 경우 함수를 만들고 이 함수를 `agg`에 전달한다.
+  - 통계 함수를 사용한 결과를 나타내므로, 기존 DataFrame 과 모양이 다른 결과를 반환한다.
+- `transfrom` : 그룹에 대한 대표값을 만드는 것이 아니라 그룹별 계산을 통해 데이터 자체를 변형한다.
+- `cut()` : 동일 길이로 나누어서 범주를 만들고 그룹에 대한 통계량 반환
+- `qcut()` : 데이터를 동일 갯수로 나누어서 범주를 만들고 그룹에 대한 통계량 반환
+- `filter()` : 그룹 객체에 **조건식**을 가진 함수를 전달하면 조건이 참인 그룹만 남긴다.
+- `pivot(index, column, value)` : 그룹 객체에 적용가능
+- `pivot_table(data, values, index, columns, aggfunc='mean')` : DataFrame에 적용가능.
+  - `margins=True` :  옵션을 넣어주면 합계도 같이 표시
+
+
+
+
 
