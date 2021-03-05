@@ -666,7 +666,7 @@ x = pd.DataFrame()
   
 - `y.fillna('value')` : NaN 값을 원하는 값으로 변경
 
-  
+- 
 
 #### DataFrame index 조작
 
