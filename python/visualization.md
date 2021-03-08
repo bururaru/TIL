@@ -107,3 +107,50 @@ hwy_outlier_df = dataDF.query('hwy>' + str(upper_outlier['hwy'])) #query 사용�
 
 
 
+
+
+### seaborn
+
+- `sns.barplot()` : 바 그래프로 평균과 편차 표시
+  - `hue="col_name"` : col_name 카테고리를 추가
+-  `sns.countplot()`: 바 그래프로 빈도 표시
+- `sns.regplot()` : 분포를 산점도로 표시
+- `sns.distplot()` : 히스토그램 (러그와 커널밀도 추가 가능)
+- `sns.heatmap()` : 만약 데이터가 2차원이고 모든 값이 카테고리 값일때 사용
+- `sns.stripplot()`: 분포도
+- `sns.swarmplot()`: 분산까지 포함된 분포도
+- `sns.jointplot()`: 기본적으로는 산점도, x-y축에 각 변수에 대한 히스토그램을 동시에 보여줌
+
+
+
+
+
+#### folium
+
+`import folium as f` 
+
+- 맵, 마커 추가하기
+
+```python
+map = f.Map(location=[37.55, 126.98], zoom_start=10) #위도, 경도 순서로 입력
+
+marker = marker = f.Marker([37.55, 127.05],          #마커 추가
+                  popup = "name",
+                  icon = f.Icon(color='blue'))
+marker.add_to(map)                                   #맵에 마커 추가
+```
+
+- 지도 위에 구역 데이터 추가
+
+```python
+map = f.Map(location=[37.55, 126.98], zoom_start=10.5)
+f.Choropleth(geo_data = geo_str,                    #json 형식의 좌표 데이터
+             data = direct_pivot,                   #구역 나누기 기준이 되는 데이터
+             columns = [direct_pivot.index, 'price'],
+             key_on = 'feature.id', fill_color = "Blues").add_to(map)
+```
+
+![image-20210308165538661](visualization.assets/image-20210308165538661.png)
+
+
+
