@@ -134,7 +134,7 @@ hwy_outlier_df = dataDF.query('hwy>' + str(upper_outlier['hwy'])) #query 사용�
 ```python
 map = f.Map(location=[37.55, 126.98], zoom_start=10) #위도, 경도 순서로 입력
 
-marker = marker = f.Marker([37.55, 127.05],          #마커 추가
+marker = f.Marker([37.55, 127.05],          #마커 추가
                   popup = "name",
                   icon = f.Icon(color='blue'))
 marker.add_to(map)                                   #맵에 마커 추가
@@ -151,6 +151,15 @@ f.Choropleth(geo_data = geo_str,                    #json 형식의 좌표 데�
 ```
 
 ![image-20210308165538661](visualization.assets/image-20210308165538661.png)
+
+- 주소 데이터 좌표로 변환
+
+```python
+gmap_key = 'AIzaSyDVS3t0uJQp5xRc2fMoQ5lp5fHr5V_dVHw'
+gmaps = googlemaps.Client(key = gmap_key)
+
+tmp_map = gmaps.geocode('서울시 성동구 뚝섬로 11길 2-1')       #tmp_map을 열어서 위도 경도 뽑아서 사용
+```
 
 
 
