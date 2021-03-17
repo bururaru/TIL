@@ -774,3 +774,10 @@ pd.merge(popDF01, popDF02, left_on=['city','year'], right_index=True)
 
 
 
+#### xlsx 파일에서 n번째 시트 가져오는 방법
+
+```python
+xls = pd.ExcelFile('./car_mpg.xlsx')
+carDF = xls.parse(xls.sheet_names[0])   #n번재 시트를 가져오는 방법e
+```
+
