@@ -781,3 +781,36 @@ xls = pd.ExcelFile('./car_mpg.xlsx')
 carDF = xls.parse(xls.sheet_names[0])   #n번재 시트를 가져오는 방법e
 ```
 
+
+
+### align
+
+여러가지 join 방법에 따라 두개의 객체의 axes 를 정렬한다.
+
+(기준이 되는 객체의 열과 동일한 열이 합쳐질 객체의 열에 없으면 지운다 default)
+
+![image-20210325173634038](Numpy, pandas.assets/image-20210325173634038.png)
+
+- right join
+
+```python
+a1, a2 = df1.align(df2, join='right', axis=1)
+display(a1)
+display(a2)
+# a1, a2로 나누지 않고 변수 하나에 받으면 a1+a2가 변수 하나에 들어간다.
+```
+
+![image-20210325173728727](Numpy, pandas.assets/image-20210325173728727.png)
+
+- left join
+
+```python
+a1, a2 = df1.align(df2, join='left', axis=1)
+display(a1)
+display(a2)
+```
+
+![image-20210325173737341](Numpy, pandas.assets/image-20210325173737341.png)
+
+
+

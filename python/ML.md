@@ -134,3 +134,14 @@ items = pd.DataFrame(['TV', '냉장고', '전자렌지', '컴퓨터', '선풍기
 pd.get_dummies(items)
 ```
 
+
+
+#### Ensemble 
+
+- voting : 단일 데이터셋에 여러 종류의 모델 사용
+  - hard voting : 다수결
+  - soft voting : 확률의 평균을 가지고 비교
+- bagging : 동일한 모델을 가지고 데이터셋의 샘플링을 다르게 해서 사용
+  - random forest : 여러개의 결정 트리 분류기가 배깅 방식으로 각자의 데이터를 샘플링해 학습을 수행한 뒤 소프트 보팅으로 판단
+- boosting
+- stacking
